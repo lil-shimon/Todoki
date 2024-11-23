@@ -1,8 +1,17 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { Prisma, Todo } from '@prisma/client'
+
+export type API = {
+  getTodos: () => Promise<Todo[]>
+  createTodo: (data: Prisma.TodoCreateInput) => Promise<Todo>
+}
 
 // Custom APIs for renderer
-const api = {}
+const api: API = {
+  getTodos: () => ipcRenderer.invoke('get-todo'),
+  createTodo: (data) => ipcRenderer.invoke('create-todo', data)
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

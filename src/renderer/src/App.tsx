@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Stack } from '@chakra-ui/react'
+import { Box, Button, Flex, Input, Stack } from '@chakra-ui/react'
 import { Todo } from '@prisma/client'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -18,6 +18,16 @@ function App(): JSX.Element {
     })
     setTodos([...todos, todo])
     setTitle('')
+  }
+
+  const deleteTodo = async (id: number): Promise<void> => {
+    const response = await window.api.deleteTodo(id)
+    if (!response) {
+      window.alert('TODOの削除に失敗しました')
+      return
+    }
+    const newTodos = todos.filter((todo) => todo.id !== id)
+    setTodos(newTodos)
   }
 
   useEffect(() => {
@@ -42,13 +52,16 @@ function App(): JSX.Element {
           <Button type="submit">add</Button>
         </Stack>
       </form>
-      <Flex gap="4" align="center" direction="column">
+      <Flex gap="4" align="center" direction="column" width="100%">
         {todos.map((todo) => (
-          <div key={todo.id}>
-            <Flex>
-              <div>{todo.title}</div>
-            </Flex>
-          </div>
+          <Flex width="100%" key={todo.id}>
+            <Box width="100%" p="2">
+              {todo.title}
+            </Box>
+            <Button type="button" onClick={() => deleteTodo(todo.id)}>
+              削除
+            </Button>
+          </Flex>
         ))}
       </Flex>
     </Flex>

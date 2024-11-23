@@ -15,4 +15,5 @@ model Todo {
   updatedAt DateTime @updatedAt
   completedAt DateTime?
   dueDate DateTime?
+  completed Boolean @default(false)
 }

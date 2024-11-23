@@ -1,4 +1,5 @@
 import { Box, Button, Flex, Input, Stack } from '@chakra-ui/react'
+import { Checkbox } from '../../components/ui/checkbox'
 import { Todo } from '@prisma/client'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -36,6 +37,14 @@ function App(): JSX.Element {
     [todos]
   )
 
+  const completeTodo = useCallback(async (id: number) => {
+    const response = await window.api.completeTodo(id)
+    if (!response) {
+      window.alert('TODOの完了に失敗しました')
+      return
+    }
+  }, [])
+
   useEffect(() => {
     getTodo()
   }, [getTodo])
@@ -61,9 +70,11 @@ function App(): JSX.Element {
       <Flex gap="4" align="center" direction="column" width="100%">
         {todos.map((todo) => (
           <Flex width="100%" key={todo.id}>
-            <Box width="100%" p="2">
-              {todo.title}
-            </Box>
+            <Checkbox width="100%" onClick={() => completeTodo(todo.id)} checked={todo.completed}>
+              <Box width="100%" p="2">
+                {todo.title}
+              </Box>
+            </Checkbox>
             <Button type="button" onClick={() => deleteTodo(todo.id)}>
               削除
             </Button>

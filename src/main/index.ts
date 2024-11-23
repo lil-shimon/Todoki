@@ -6,6 +6,7 @@ import {
   completeTodo,
   createTodo,
   deleteTodo,
+  getCompletedTasksByDate,
   getCompleteTodos,
   getIncompleteTodos,
   getTodos
@@ -91,6 +92,10 @@ app.whenReady().then(() => {
 
   ipcMain.handle('get-incomplete-todo', () => {
     return getIncompleteTodos()
+  })
+
+  ipcMain.handle('get-completed-tasks-by-date', async () => {
+    return await getCompletedTasksByDate()
   })
 
   createWindow()

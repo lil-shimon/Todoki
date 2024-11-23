@@ -55,6 +55,11 @@ function App(): JSX.Element {
     [getIncompleteTodos]
   )
 
+  const getCompletedTasksByDate = useCallback(async () => {
+    const response = await window.api.getCompletedTasksByDate()
+    console.log('response', response)
+  }, [])
+
   useEffect(() => {
     getIncompleteTodos()
   }, [getIncompleteTodos])
@@ -62,6 +67,10 @@ function App(): JSX.Element {
   useEffect(() => {
     getCompleteTodos()
   }, [getCompleteTodos])
+
+  useEffect(() => {
+    getCompletedTasksByDate()
+  }, [getCompletedTasksByDate])
 
   const handleTitle = useCallback((value: string) => {
     setTitle(value)

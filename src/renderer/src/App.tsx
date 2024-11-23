@@ -7,10 +7,10 @@ function App(): JSX.Element {
   const [title, setTitle] = useState('')
   const [todos, setTodos] = useState<Todo[]>([])
 
-  const getTodo = useCallback(async (): Promise<void> => {
-    const todos = await window.api.getTodos()
+  const getIncompleteTodos = useCallback(async (): Promise<void> => {
+    const todos = await window.api.getIncompleteTodos()
     setTodos(todos)
-  }, [setTodos])
+  }, [])
 
   const createTodo = useCallback(
     async (e): Promise<void> => {
@@ -37,17 +37,21 @@ function App(): JSX.Element {
     [todos]
   )
 
-  const completeTodo = useCallback(async (id: number) => {
-    const response = await window.api.completeTodo(id)
-    if (!response) {
-      window.alert('TODOの完了に失敗しました')
-      return
-    }
-  }, [])
+  const completeTodo = useCallback(
+    async (id: number) => {
+      const response = await window.api.completeTodo(id)
+      if (!response) {
+        window.alert('TODOの完了に失敗しました')
+        return
+      }
+      await getIncompleteTodos()
+    },
+    [getIncompleteTodos]
+  )
 
   useEffect(() => {
-    getTodo()
-  }, [getTodo])
+    getIncompleteTodos()
+  }, [getIncompleteTodos])
 
   const handleTitle = useCallback((value: string) => {
     setTitle(value)

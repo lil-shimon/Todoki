@@ -30,13 +30,17 @@ export const createTodo = async (data: Prisma.TodoCreateInput): Promise<Todo> =>
 }
 
 export const completeTodo = async (id: number): Promise<Todo> => {
+  const now = new Date()
   return await prisma.todo.update({
     where: {
       id
     },
     data: {
       completed: true,
-      completedAt: new Date()
+      completedAt: now,
+      completedYear: now.getFullYear(),
+      completedMonth: now.getMonth() + 1,
+      completedDay: now.getDate()
     }
   })
 }

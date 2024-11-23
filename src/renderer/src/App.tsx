@@ -1,23 +1,57 @@
-import { Button } from '@chakra-ui/react'
+import { Button, Flex, Input, Stack } from '@chakra-ui/react'
+import { Todo } from '@prisma/client'
+import { useCallback, useEffect, useState } from 'react'
 
 function App(): JSX.Element {
-  const getTodo = async (): Promise<void> => {
+  const [title, setTitle] = useState('')
+  const [todos, setTodos] = useState<Todo[]>([])
+
+  const getTodo = useCallback(async (): Promise<void> => {
     const todos = await window.api.getTodos()
-    console.log(todos)
+    setTodos(todos)
+  }, [setTodos])
+
+  const createTodo = async (e): Promise<void> => {
+    e.preventDefault()
+    const todo = await window.api.createTodo({
+      title
+    })
+    setTodos([...todos, todo])
+    setTitle('')
   }
 
-  const createTodo = async (): Promise<void> => {
-    const todo = await window.api.createTodo({
-      title: 'Hello, World!'
-    })
-    console.log(todo)
-  }
+  useEffect(() => {
+    getTodo()
+  }, [getTodo])
+
+  const handleTitle = useCallback((value: string) => {
+    setTitle(value)
+  }, [])
 
   return (
-    <>
-      <Button onClick={getTodo}>Fetch</Button>
-      <Button onClick={createTodo}>Create</Button>
-    </>
+    <Flex gap="16" direction="column">
+      <form onSubmit={createTodo}>
+        <Stack direction="row">
+          <Input
+            placeholder="Todoを入力"
+            id="todo title"
+            aria-label="todo title"
+            onChange={(e) => handleTitle(e.target.value)}
+            value={title}
+          />
+          <Button type="submit">add</Button>
+        </Stack>
+      </form>
+      <Flex gap="4" align="center" direction="column">
+        {todos.map((todo) => (
+          <div key={todo.id}>
+            <Flex>
+              <div>{todo.title}</div>
+            </Flex>
+          </div>
+        ))}
+      </Flex>
+    </Flex>
   )
 }
 

@@ -16,4 +16,7 @@ model Todo {
   completedAt DateTime?
   dueDate DateTime?
   completed Boolean @default(false)
+  completedYear Int?
+  completedMonth Int?
+  completedDay Int?
 }

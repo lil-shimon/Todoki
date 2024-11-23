@@ -60,15 +60,13 @@ export const deleteTodo = async (id: number): Promise<boolean> => {
 
 export const getCompletedTasksByDate = async (): Promise<Prisma.TodoGroupByArgs> => {
   return await prisma.todo.groupBy({
-    by: ['completedAt'],
+    by: ['completedYear', 'completedMonth', 'completedDay'],
     where: {
       completed: true
     },
     _count: {
       _all: true
     },
-    orderBy: {
-      completedAt: 'desc'
-    }
+    orderBy: [{ completedYear: 'desc' }, { completedMonth: 'desc' }, { completedDay: 'desc' }]
   })
 }

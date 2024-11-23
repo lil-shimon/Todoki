@@ -11,24 +11,30 @@ function App(): JSX.Element {
     setTodos(todos)
   }, [setTodos])
 
-  const createTodo = async (e): Promise<void> => {
-    e.preventDefault()
-    const todo = await window.api.createTodo({
-      title
-    })
-    setTodos([...todos, todo])
-    setTitle('')
-  }
+  const createTodo = useCallback(
+    async (e): Promise<void> => {
+      e.preventDefault()
+      const todo = await window.api.createTodo({
+        title
+      })
+      setTodos([...todos, todo])
+      setTitle('')
+    },
+    [title, todos]
+  )
 
-  const deleteTodo = async (id: number): Promise<void> => {
-    const response = await window.api.deleteTodo(id)
-    if (!response) {
-      window.alert('TODOの削除に失敗しました')
-      return
-    }
-    const newTodos = todos.filter((todo) => todo.id !== id)
-    setTodos(newTodos)
-  }
+  const deleteTodo = useCallback(
+    async (id: number): Promise<void> => {
+      const response = await window.api.deleteTodo(id)
+      if (!response) {
+        window.alert('TODOの削除に失敗しました')
+        return
+      }
+      const newTodos = todos.filter((todo) => todo.id !== id)
+      setTodos(newTodos)
+    },
+    [todos]
+  )
 
   useEffect(() => {
     getTodo()

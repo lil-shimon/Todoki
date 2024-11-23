@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { completeTodo, createTodo, deleteTodo, getTodos } from './db/todo'
+import { completeTodo, createTodo, deleteTodo, getIncompleteTodos, getTodos } from './db/todo'
 import { Prisma } from '@prisma/client'
 
 function createWindow(): void {
@@ -76,6 +76,10 @@ app.whenReady().then(() => {
 
   ipcMain.handle('complete-todo', (_, id: number) => {
     return completeTodo(id)
+  })
+
+  ipcMain.handle('get-incomplete-todo', () => {
+    return getIncompleteTodos()
   })
 
   createWindow()

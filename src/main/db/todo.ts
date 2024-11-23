@@ -2,8 +2,17 @@ import { PrismaClient, Todo, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+// TODO: delete
 export const getTodos = async (): Promise<Todo[]> => {
   return await prisma.todo.findMany()
+}
+
+export const getIncompleteTodos = async (): Promise<Todo[]> => {
+  return await prisma.todo.findMany({
+    where: {
+      completed: false
+    }
+  })
 }
 
 export const createTodo = async (data: Prisma.TodoCreateInput): Promise<Todo> => {

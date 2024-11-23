@@ -4,6 +4,7 @@ import { Prisma, Todo } from '@prisma/client'
 
 export type API = {
   getTodos: () => Promise<Todo[]>
+  getIncompleteTodos: () => Promise<Todo[]>
   createTodo: (data: Prisma.TodoCreateInput) => Promise<Todo>
   deleteTodo: (id: number) => Promise<boolean>
   completeTodo: (id: number) => Promise<Todo>
@@ -12,6 +13,7 @@ export type API = {
 // Custom APIs for renderer
 const api: API = {
   getTodos: () => ipcRenderer.invoke('get-todo'),
+  getIncompleteTodos: () => ipcRenderer.invoke('get-incomplete-todo'),
   createTodo: (data) => ipcRenderer.invoke('create-todo', data),
   deleteTodo: (id) => ipcRenderer.invoke('delete-todo', id),
   completeTodo: (id) => ipcRenderer.invoke('complete-todo', id)

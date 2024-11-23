@@ -11,3 +11,16 @@ export const createTodo = async (data: Prisma.TodoCreateInput): Promise<Todo> =>
     data
   })
 }
+
+export const deleteTodo = async (id: number): Promise<boolean> => {
+  try {
+    await prisma.todo.delete({
+      where: {
+        id
+      }
+    })
+    return true
+  } catch {
+    return false
+  }
+}

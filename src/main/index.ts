@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { createTodo, getTodos } from './db/todo'
+import { createTodo, deleteTodo, getTodos } from './db/todo'
 import { Prisma } from '@prisma/client'
 
 function createWindow(): void {
@@ -68,6 +68,10 @@ app.whenReady().then(() => {
 
   ipcMain.handle('create-todo', (_, data: Prisma.TodoCreateInput) => {
     return createTodo(data)
+  })
+
+  ipcMain.handle('delete-todo', (_, id: number) => {
+    return deleteTodo(id)
   })
 
   createWindow()

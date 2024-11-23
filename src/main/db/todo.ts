@@ -7,6 +7,14 @@ export const getTodos = async (): Promise<Todo[]> => {
   return await prisma.todo.findMany()
 }
 
+export const getCompleteTodos = async (): Promise<Todo[]> => {
+  return await prisma.todo.findMany({
+    where: {
+      completed: true
+    }
+  })
+}
+
 export const getIncompleteTodos = async (): Promise<Todo[]> => {
   return await prisma.todo.findMany({
     where: {

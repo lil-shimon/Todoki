@@ -6,6 +6,12 @@ import { useCallback, useEffect, useState } from 'react'
 function App(): JSX.Element {
   const [title, setTitle] = useState('')
   const [todos, setTodos] = useState<Todo[]>([])
+  const [completedTodos, setCompletedTodos] = useState<Todo[]>([])
+
+  const getCompleteTodos = useCallback(async (): Promise<void> => {
+    const todos = await window.api.getCompleteTodos()
+    setCompletedTodos(todos)
+  }, [])
 
   const getIncompleteTodos = useCallback(async (): Promise<void> => {
     const todos = await window.api.getIncompleteTodos()
@@ -53,6 +59,10 @@ function App(): JSX.Element {
     getIncompleteTodos()
   }, [getIncompleteTodos])
 
+  useEffect(() => {
+    getCompleteTodos()
+  }, [getCompleteTodos])
+
   const handleTitle = useCallback((value: string) => {
     setTitle(value)
   }, [])
@@ -85,6 +95,15 @@ function App(): JSX.Element {
           </Flex>
         ))}
       </Flex>
+      <div>
+        {completedTodos.map((todo) => (
+          <Flex width="100%" key={todo.id}>
+            <Box width="100%" p="2">
+              {todo.title}
+            </Box>
+          </Flex>
+        ))}
+      </div>
     </Flex>
   )
 }

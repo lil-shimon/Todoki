@@ -6,13 +6,15 @@ export type API = {
   getTodos: () => Promise<Todo[]>
   createTodo: (data: Prisma.TodoCreateInput) => Promise<Todo>
   deleteTodo: (id: number) => Promise<boolean>
+  completeTodo: (id: number) => Promise<Todo>
 }
 
 // Custom APIs for renderer
 const api: API = {
   getTodos: () => ipcRenderer.invoke('get-todo'),
   createTodo: (data) => ipcRenderer.invoke('create-todo', data),
-  deleteTodo: (id) => ipcRenderer.invoke('delete-todo', id)
+  deleteTodo: (id) => ipcRenderer.invoke('delete-todo', id),
+  completeTodo: (id) => ipcRenderer.invoke('complete-todo', id)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Input, Stack } from '@chakra-ui/react'
-import { Checkbox } from '../../../../components/ui/checkbox'
 import { ReactNode } from 'react'
 import { useTodoListPresenter } from './todo-list.presenter'
+import { TodoListItem } from '../todo-list-item'
 
 export const TodoList = (): ReactNode => {
   const {
@@ -30,20 +30,12 @@ export const TodoList = (): ReactNode => {
       </form>
       <Flex gap="4" align="center" direction="column" width="100%">
         {todos.map((todo) => (
-          <Flex width="100%" key={todo.id}>
-            <Checkbox
-              width="100%"
-              onClick={() => handleCompleteTodo(todo.id)}
-              checked={todo.completed}
-            >
-              <Box width="100%" p="2">
-                {todo.title}
-              </Box>
-            </Checkbox>
-            <Button type="button" onClick={() => handleDeleteTodo(todo.id)}>
-              削除
-            </Button>
-          </Flex>
+          <TodoListItem
+            key={todo.id}
+            todo={todo}
+            onCompleteTodo={handleCompleteTodo}
+            onDeleteTodo={handleDeleteTodo}
+          />
         ))}
       </Flex>
       <div>
